@@ -1,3 +1,5 @@
+export { getPicture };
+
 const { default: axios } = require("axios");
 
 const URL = "https://pixabay.com/api/";
@@ -9,5 +11,3 @@ const REQUEST_OPTIONS =
 function getPicture(query) {
   return axios.get(`${URL}${API_KEY}&q=${query}&${REQUEST_OPTIONS}`);
 }
-
-export { getPicture };
