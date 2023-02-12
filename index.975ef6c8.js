@@ -504,6 +504,7 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"8lqZg":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+// console.log("HI!");
 var _indexScss = require("./sass/index.scss");
 var _getApi = require("./scripts/getApi");
 var _galleryCards = require("./scripts/galleryCards");
@@ -512,7 +513,6 @@ var _notiflixDefault = parcelHelpers.interopDefault(_notiflix);
 var _simplelightbox = require("simplelightbox");
 var _simplelightboxDefault = parcelHelpers.interopDefault(_simplelightbox);
 var _simpleLightboxMinCss = require("simplelightbox/dist/simple-lightbox.min.css");
-console.log("HI!");
 const form = document.getElementById("search-form");
 const gallery = document.querySelector(".gallery");
 const loadMoreBtn = document.querySelector(".btn-load-more");
@@ -528,6 +528,7 @@ function onSubmit(e) {
     gallery.innerHTML = "";
     page = 1;
     loadMoreBtn.classList.add("is-hidden");
+    // window.scrollTo({ top: 0 });
     if (query === "") {
         alertNoEmptySearch();
         return;
@@ -562,7 +563,7 @@ function alertNoEmptySearch() {
     (0, _notiflixDefault.default).Notify.failure("The search string cannot be empty! Please enter some keyword!;)");
 }
 function alertNoImagesByKeyword() {
-    (0, _notiflixDefault.default).Notify.failure('"Sorry, there are no images matching your search query. Please try again."');
+    (0, _notiflixDefault.default).Notify.failure("Sorry, there are no images matching your search query. Please try again.");
 }
 function alertImagesFoundByKeyword(data) {
     (0, _notiflixDefault.default).Notify.success(`Hooray! We found ${data.totalHits} images.`);
@@ -1368,8 +1369,9 @@ const { default: axios  } = require("axios");
 const URL = "https://pixabay.com/api/";
 const API_KEY = "?key=33273025-546ff08445fd4a61172a6ea0a";
 const REQUEST_OPTIONS = "image_type=photo&orientation=horizontal&safesearch=true";
-function getPicture(query, page, perPage) {
-    return axios.get(`${URL}${API_KEY}&q=${query}&${REQUEST_OPTIONS}&page=${page}&per_page=${perPage}`);
+async function getPicture(query, page, perPage) {
+    const response = await axios.get(`${URL}${API_KEY}&q=${query}&${REQUEST_OPTIONS}&page=${page}&per_page=${perPage}`);
+    return response;
 }
 
 },{"axios":"jo6P5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jo6P5":[function(require,module,exports) {
@@ -7167,26 +7169,20 @@ const gallery = document.querySelector(".gallery");
 function createCards(cards) {
     const markup = cards.map((card)=>{
         const { largeImageURL , webformatURL , tags , likes , views , comments , downloads ,  } = card;
-        return `<a class="gallery_item" href=${largeImageURL}>
-      <div class="photo-card">
-  <img src="${webformatURL}" alt="${tags}" loading="lazy" />
-  <div class="info">
-    <p class="info-item">
-      <b>Likes</b> ${likes}
-    </p>
-    <p class="info-item">
-      <b>Views</b> ${views}
-    </p>
-    <p class="info-item">
-      <b>Comments</b> ${comments}
-    </p>
-    <p class="info-item">
-      <b>Downloads</b> ${downloads}
-    </p>
-  </div>
-</div>
-</a>`;
-    }).join();
+        return `
+       <a class="gallery__link" href="${largeImageURL}">
+          <div class="gallery-item">
+            <img class="gallery-item__img" src="${webformatURL}" alt="${tags}" loading="lazy" />
+            <div class="info">
+              <p class="info-item"><b>Likes</b>${likes}</p>
+              <p class="info-item"><b>Views</b>${views}</p>
+              <p class="info-item"><b>Comments</b>${comments}</p>
+              <p class="info-item"><b>Downloads</b>${downloads}</p>
+            </div>
+          </div>
+        </a>
+        `;
+    }).join("");
     gallery.insertAdjacentHTML("beforeend", markup);
 }
 
